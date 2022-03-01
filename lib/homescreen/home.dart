@@ -14,6 +14,13 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+
+  HomeState() {
+    correctAnswerCounter = 0;
+    global_background_color = Colors.lightBlueAccent;
+    i = 0;
+    percentage = 0;
+  }
   static Color global_background_color = Colors.lightBlueAccent;
   static int correctAnswerCounter = 0;
   late Future<List<Question>> _futureQuestionData;
@@ -31,10 +38,10 @@ class HomeState extends State<Home> {
   }
 
   void next() {
-    this.percentage =  1 * (this.i + 1) / questionList.length;
+    this.percentage =  1 * (i + 1) / questionList.length;
     setState(() {
-      if (this.i < questionList.length - 1) {
-        this.i++;
+      if (i < questionList.length - 1) {
+        i++;
       } else {
         navigateToResultPage();
       }
@@ -85,12 +92,12 @@ class HomeState extends State<Home> {
               child: Icon(Icons.settings),
             )
           ),
-          QuestionWidget(questionList[this.i].question_text,
+          QuestionWidget(questionList[i].question_text,
               Colors.white),
           buildProgressBar(),
-          ...(questionList[this.i].answers as List<String>)
+          ...(questionList[i].answers as List<String>)
               .map((answer) {
-            return AnswerWidget(answer, next, questionList[this.i].correctAnswer);
+            return AnswerWidget(answer, next, questionList[i].correctAnswer);
           }).toList()
         ],
       )

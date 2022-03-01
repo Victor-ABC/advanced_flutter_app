@@ -1,6 +1,11 @@
 import 'package:advanced_quiz_app/homescreen/home.dart';
+import 'package:advanced_quiz_app/resultscreen/statistics.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../main.dart';
+import './charts/pie_chart.dart';
+import './charts/doughnut_chart.dart';
+import 'charts/radial_bar_chart.dart';
 
 class ResultScreen extends StatefulWidget {
   int totalAmountOfCorrectAnswers;
@@ -26,40 +31,60 @@ class _ResultState extends State<ResultScreen> {
 
   _ResultState(this.totalAmountOfQuestions, this.totalAmountOfCorrectAnswers);
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Sind sie sicher?'),
+        content: new Text('Wollen sie das Quiz neu starten'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('Nein'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                new MaterialPageRoute(builder: (ctxt) => new Home()),
+              );
+            },
+            child: new Text('Ja'),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Quiz"),
-          centerTitle: true,
-        ),
-        body: SfCircularChart(
-          backgroundColor: HomeState.global_background_color,
-          title: ChartTitle(
-            text: 'Statistiken',
-            textStyle: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          legend: Legend(
-            isVisible: true,
-            overflowMode: LegendItemOverflowMode.wrap,
-          ),
-          series: <CircularSeries>[
-            PieSeries<Statistics, String>(
-              //PieSeries -> DoughnutSeries
-              //PieSeries -> RadialBarSeries
-              dataSource: _statistics,
-              xValueMapper: (Statistics data, _) => data.label,
-              yValueMapper: (Statistics data, _) => data.amount,
-              dataLabelSettings: DataLabelSettings(
-                isVisible: true,
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text("Quiz"),
+                centerTitle: true,
+                bottom: TabBar(
+                  tabs: [
+                    Tab(text: "Pie-Chart", icon: Icon(Icons.pie_chart),),
+                    Tab(text: "Doughnut-Chart",icon: Icon(Icons.bar_chart),),
+                    Tab(text: "Radial-Chart",icon: Icon(Icons.multiline_chart),),
+                  ],
+                ),
               ),
-            ),
-          ],
+              body: TabBarView(
+                children: [
+                  PieChart(_statistics),
+                  DoughnutChart(_statistics),
+                  RadialBarChart(_statistics),
+                ],
+              )
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -68,19 +93,14 @@ class _ResultState extends State<ResultScreen> {
       Statistics(
         "richtig",
         this.totalAmountOfCorrectAnswers,
+        Colors.lightGreen,
       ),
       Statistics(
         "falsch",
         this.totalAmountOfQuestions - this.totalAmountOfCorrectAnswers,
+        Colors.red,
       )
     ];
     return statistics;
   }
-}
-
-class Statistics {
-  final String label;
-  final int amount;
-
-  Statistics(this.label, this.amount);
 }
