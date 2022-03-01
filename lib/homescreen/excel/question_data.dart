@@ -31,6 +31,7 @@ class QuestionData {
       for (var i = 1; i < row.length - 1; i++) {
         answers.add(row[i].toString());
       }
+      answers.shuffle(); //random
       questions.add(Question(row[0], answers, row[row.length - 1].toString()));
     }
   }
