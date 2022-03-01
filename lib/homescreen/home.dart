@@ -81,9 +81,8 @@ class HomeState extends State<Home> {
     );
   }
 
-  Flexible buildQuestionScreen() {
-    return Flexible(
-      child: Column(
+  Column buildQuestionScreen() {
+      return Column(
         children: [
           Align(
             alignment: Alignment.topLeft,
@@ -100,8 +99,7 @@ class HomeState extends State<Home> {
             return AnswerWidget(answer, next, questionList[i].correctAnswer);
           }).toList()
         ],
-      )
-    );
+      );
   }
   Widget buildProgressBar() {
     return Container(
