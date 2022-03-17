@@ -6,13 +6,14 @@ import '../statistics.dart';
 
 class PieChart extends StatelessWidget {
   List<Statistics> _statistics;
-  PieChart(this._statistics);
+  Color backgroundColor;
+  PieChart(this._statistics, this.backgroundColor);
 
 
   @override
   Widget build(BuildContext context) {
     return SfCircularChart(
-      backgroundColor: HomeState.global_background_color,
+      backgroundColor: backgroundColor,
       title: ChartTitle(
         text: 'Deine Ergebnisse',
         textStyle: TextStyle(

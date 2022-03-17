@@ -1,6 +1,8 @@
 import 'package:advanced_quiz_app/homescreen/home.dart';
+import 'package:advanced_quiz_app/model/color_model.dart';
 import 'package:advanced_quiz_app/resultscreen/statistics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 import './charts/pie_chart.dart';
@@ -75,12 +77,16 @@ class _ResultState extends State<ResultScreen> {
                   ],
                 ),
               ),
-              body: TabBarView(
-                children: [
-                  PieChart(_statistics),
-                  DoughnutChart(_statistics),
-                  RadialBarChart(_statistics),
-                ],
+              body: Consumer<ColorModel>(
+                builder: (context, value, child) {
+                  return TabBarView(
+                    children: [
+                      PieChart(_statistics, value.color),
+                      DoughnutChart(_statistics, value.color),
+                      RadialBarChart(_statistics, value.color),
+                    ],
+                  );
+                },
               )
           ),
         ),

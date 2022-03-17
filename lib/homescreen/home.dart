@@ -1,9 +1,11 @@
 import 'package:advanced_quiz_app/homescreen/excel/question.dart';
 import 'package:advanced_quiz_app/homescreen/excel/question_data.dart';
 import 'package:advanced_quiz_app/homescreen/quiz/answer_widget.dart';
+import 'package:advanced_quiz_app/model/color_model.dart';
 import 'package:advanced_quiz_app/resultscreen/result.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import '../secondscreen/sencond.dart';
 import './quiz/question_widget.dart';
@@ -17,11 +19,9 @@ class HomeState extends State<Home> {
 
   HomeState() {
     correctAnswerCounter = 0;
-    global_background_color = Colors.lightBlueAccent;
     i = 0;
     percentage = 0;
   }
-  static Color global_background_color = Colors.lightBlueAccent;
   static int correctAnswerCounter = 0;
   late Future<List<Question>> _futureQuestionData;
   late List<Question> questionList;
@@ -60,24 +60,28 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Quiz"),
-        centerTitle: true,
-      ),
-      body: Container(
-        color: global_background_color,
-        child: FutureBuilder(
-          future: _futureQuestionData,
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return buildQuestionScreen();
-            } else {
-              return splashScreen();
-            }
-          },
-        )
-      ),
+    return Consumer<ColorModel>(
+      builder: (context, colors, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Quiz"),
+            centerTitle: true,
+          ),
+          body: Container(
+              color: colors.color,
+              child: FutureBuilder(
+                future: _futureQuestionData,
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    return buildQuestionScreen();
+                  } else {
+                    return splashScreen();
+                  }
+                },
+              )
+          ),
+        );
+      },
     );
   }
 

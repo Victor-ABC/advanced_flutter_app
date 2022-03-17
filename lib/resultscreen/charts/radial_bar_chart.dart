@@ -6,12 +6,13 @@ import '../statistics.dart';
 
 class RadialBarChart extends StatelessWidget {
   List<Statistics> _statistics;
-  RadialBarChart(this._statistics);
+  Color backgroundColor;
+  RadialBarChart(this._statistics, this.backgroundColor);
 
   @override
   Widget build(BuildContext context) {
     return SfCircularChart(
-      backgroundColor: HomeState.global_background_color,
+      backgroundColor: backgroundColor,
       title: ChartTitle(
         text: 'Deine Ergebnisse',
         textStyle: TextStyle(

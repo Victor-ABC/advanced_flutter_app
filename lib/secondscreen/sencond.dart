@@ -1,4 +1,6 @@
+import 'package:advanced_quiz_app/model/color_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../homescreen/home.dart';
 
 class SecondScreen extends StatefulWidget {
@@ -30,12 +32,12 @@ class _SecondScreenState extends State<SecondScreen> {
         crossAxisCount: 2,
         // Generate 100 widgets that display their index in the List.
         children: List.generate(colors.length, (index) {
-          return InkWell(
-            onTap: () {
-              HomeState.global_background_color = colors[index];
-            }, // Handle your callback
-            child: Ink(height: 100, width: 100, color: this.colors[index]),
-          );
+          return Consumer<ColorModel>(builder: (context, value, child) {
+            return InkWell(
+              onTap: () => value.setColor(colors[index]),
+              child: Ink(height: 100, width: 100, color: this.colors[index]),
+            );
+          });
         }),
       ),
     );

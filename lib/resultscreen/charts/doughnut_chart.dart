@@ -6,12 +6,13 @@ import '../statistics.dart';
 
 class DoughnutChart extends StatelessWidget {
   List<Statistics> _statistics;
-  DoughnutChart(this._statistics);
+  Color backgroundColor;
+  DoughnutChart(this._statistics, this.backgroundColor);
 
   @override
   Widget build(BuildContext context) {
     return SfCircularChart(
-      backgroundColor: HomeState.global_background_color,
+      backgroundColor: backgroundColor,
       title: ChartTitle(
         text: 'Deine Ergebnisse',
         textStyle: TextStyle(
